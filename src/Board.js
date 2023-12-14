@@ -44,6 +44,13 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
 
   function hasWon() {
     // TODO: check the board in state to determine whether the player has won.
+    for(let r of board){
+      for(let c of r){
+        if(!c)return false;
+      }
+    }
+    console.log('you won!')
+    return true
   }
 
   function flipCellsAround(coord) {
@@ -59,28 +66,36 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
       };
 
       // TODO: Make a (deep) copy of the oldBoard
+      const boardCopy = oldBoard.map( r => r.map( c=> c))
 
       // TODO: in the copy, flip this cell and the cells around it
+      flipCell(y, x, boardCopy)
+      flipCell(y+1, x, boardCopy)
+      flipCell(y-1, x, boardCopy)
+      flipCell(y, x+1, boardCopy)
+      flipCell(y, x-1, boardCopy)
 
       // TODO: return the copy
+      return boardCopy;
     });
   }
 
   // if the game is won, just show a winning msg & render nothing else
 
   // TODO
+  if(hasWon()) return <h2>You won!</h2>
 
   // make table board
 
   return(
     <table className="Board">
-      <tbody>
+      {<tbody>
         {board.map( (r,rowIdx) => (
           <tr className="Board-Row" key={`row-${rowIdx}`}>
-            {r.map( (c,colIdx) => <Cell flipCellsAroundMe={flipCellsAround} isLit={c} key={`${rowIdx}-${colIdx}`}/>)}
+            {r.map( (c,colIdx) => <Cell flipCellsAroundMe={flipCellsAround} isLit={c} coord={`${rowIdx}-${colIdx}`} key={`${rowIdx}-${colIdx}`}/>)}
           </tr>
         ))}
-      </tbody>
+      </tbody>}
     </table>
   )
 }
